@@ -1,6 +1,6 @@
 package edu.upb.facturas.entity.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import edu.upb.facturas.dao.entity.UserDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -60,5 +60,15 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDto getDto() {
+        UserDto userDto = new UserDto();
+        userDto.setId(this.getId());
+        userDto.setName(this.getName());
+        userDto.setEmail(this.getEmail());
+        userDto.setUsername(this.getUsername());
+        userDto.setBirthday(this.getBirthday());
+        return userDto;
     }
 }

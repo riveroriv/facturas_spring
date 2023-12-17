@@ -2,6 +2,7 @@ package edu.upb.facturas.security;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
+import edu.upb.facturas.entity.model.Role;
 import edu.upb.facturas.entity.service.UserService;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +30,14 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserService userService;
 
+    @Value("${api.app.path}")
+    private String appPath;
+
     @Value("${api.auth.path}")
     private String authPath;
+
+    @Value("${api.admin.path}")
+    private String adminPath;
 
 
     @Bean
@@ -38,7 +45,8 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         request -> request
-                                .requestMatchers((authPath+"/**")).permitAll()
+                                .requestMatchers((appPath+authPath+"/**")).permitAll()
+                                .requestMatchers((appPath+adminPath+"/**")).hasAuthority(Role.ADMIN.name())
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(

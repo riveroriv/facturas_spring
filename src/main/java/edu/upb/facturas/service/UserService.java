@@ -1,4 +1,4 @@
-package edu.upb.facturas.entity.service;
+package edu.upb.facturas.service;
 
 import edu.upb.facturas.dao.entity.UserDto;
 import edu.upb.facturas.dao.request.ChangePasswordRequest;

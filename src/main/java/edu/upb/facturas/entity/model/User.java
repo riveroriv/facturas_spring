@@ -22,6 +22,7 @@ public class User implements UserDetails {
     @Column(name = "ID")
     private Long id;
 
+    @Column(unique = true)
     private String username;
 
     private String password;
@@ -29,7 +30,7 @@ public class User implements UserDetails {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "EMAIL")
+    @Column(name = "EMAIL", unique = true)
     private String email;
 
     @Column(name = "BIRTHDAY")

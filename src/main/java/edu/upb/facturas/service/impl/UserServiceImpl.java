@@ -1,11 +1,10 @@
-package edu.upb.facturas.entity.service.impl;
+package edu.upb.facturas.service.impl;
 
 import edu.upb.facturas.dao.entity.UserDto;
-import edu.upb.facturas.dao.request.ChangePasswordRequest;
 import edu.upb.facturas.entity.model.Role;
 import edu.upb.facturas.entity.model.User;
 import edu.upb.facturas.entity.repository.UserRepository;
-import edu.upb.facturas.entity.service.UserService;
+import edu.upb.facturas.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;

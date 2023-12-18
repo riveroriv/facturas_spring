@@ -2,8 +2,8 @@ package edu.upb.facturas.security;
 
 import java.io.IOException;
 
-import edu.upb.facturas.entity.service.JwtService;
-import edu.upb.facturas.entity.service.UserService;
+import edu.upb.facturas.service.JwtService;
+import edu.upb.facturas.service.UserService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

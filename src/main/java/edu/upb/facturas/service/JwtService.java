@@ -1,4 +1,4 @@
-package edu.upb.facturas.entity.service;
+package edu.upb.facturas.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 

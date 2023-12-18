@@ -1,4 +1,4 @@
-package edu.upb.facturas.entity.service.impl;
+package edu.upb.facturas.service.impl;
 
 import edu.upb.facturas.dao.request.ChangePasswordRequest;
 import edu.upb.facturas.dao.request.SignUpRequest;
@@ -7,8 +7,8 @@ import edu.upb.facturas.dao.response.JwtAuthenticationResponse;
 import edu.upb.facturas.entity.model.Role;
 import edu.upb.facturas.entity.model.User;
 import edu.upb.facturas.entity.repository.UserRepository;
-import edu.upb.facturas.entity.service.AuthenticationService;
-import edu.upb.facturas.entity.service.JwtService;
+import edu.upb.facturas.service.AuthenticationService;
+import edu.upb.facturas.service.JwtService;
 
 
 import org.springframework.dao.DataIntegrityViolationException;

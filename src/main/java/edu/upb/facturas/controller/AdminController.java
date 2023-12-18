@@ -1,11 +1,10 @@
 package edu.upb.facturas.controller;
 
 import edu.upb.facturas.entity.model.Role;
-import edu.upb.facturas.entity.service.UserService;
+import edu.upb.facturas.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

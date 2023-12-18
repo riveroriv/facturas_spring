@@ -1,6 +1,6 @@
-package edu.upb.facturas.entity.service.impl;
+package edu.upb.facturas.service.impl;
 
-import edu.upb.facturas.entity.service.JwtService;
+import edu.upb.facturas.service.JwtService;
 
 import java.security.Key;
 import java.util.Date;

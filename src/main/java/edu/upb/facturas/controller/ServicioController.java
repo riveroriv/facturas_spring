@@ -2,10 +2,13 @@ package edu.upb.facturas.controller;
 
 import edu.upb.facturas.dao.entity.UserDto;
 import edu.upb.facturas.dao.request.ChangePasswordRequest;
+import edu.upb.facturas.entity.model.Servicio;
 import edu.upb.facturas.service.AuthenticationService;
+import edu.upb.facturas.service.ServicioService;
 import edu.upb.facturas.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,59 +25,63 @@ import java.util.NoSuchElementException;
                 RequestMethod.DELETE,
                 RequestMethod.PUT
         })
-public class UserController {
-    @Autowired
-    UserService userService;
+public class ServicioController {
+
     @Autowired
     SimpleResponse sr;
+
     @Autowired
-    AuthenticationService authenticationService;
+    ServicioService servicioService;
 
 
-    @GetMapping("/user")
-    public ResponseEntity<?> getUser(){
+    @GetMapping("/service")
+    public ResponseEntity<?> getService(){
         try {
-            log .info("User request: get info");
-            return sr.get(200, userService.user());
+            log .info("User request: get services");
+            return sr.get(200, servicioService.findByOwner());
         } catch (NoSuchElementException exception) {
             return sr.get(404);
         } catch (Exception exception) {
             return sr.get(500);
         }
     }
-    @PostMapping("/user")
-    public ResponseEntity<?> changePassword(
-            @RequestBody ChangePasswordRequest request
+    @PostMapping("/service")
+    public ResponseEntity<?> changeService(
+            @RequestBody Servicio servicio
             ){
         try {
-            log .info("User request: updating info");
-            return sr.get(200, authenticationService.changePassword(request));
-        } catch (IllegalArgumentException exception) {
-            return sr.get(400);
+            log .info("User request: creating servicio");
+            return sr.get(200, servicioService.create(servicio));
+        } catch (DataIntegrityViolationException exception) {
+            return sr.get(409);
         } catch (Exception exception) {
             return sr.get(500);
         }
     }
-    @PutMapping("/user")
-    public ResponseEntity<?> updateUser(
-            @RequestBody UserDto user
+    @PutMapping("/service")
+    public ResponseEntity<?> updateService(
+            @RequestBody Servicio servicio
     ){
         try {
-            log .info("User request: updating info");
-            return sr.get(200, userService.update(user));
+            log .info("User request: updating servicio");
+            return sr.get(200, servicioService.update(servicio));
         } catch (NoSuchElementException exception) {
             return sr.get(404);
         } catch (Exception exception) {
             return sr.get(500);
         }
     }
-    @DeleteMapping("/user")
-    public ResponseEntity<?> deleteUser(){
+    @DeleteMapping("/service/{service}")
+    public ResponseEntity<?> deleteUser(
+            @PathVariable Long service
+    ){
         try {
-            log .info("User request: delete info");
-            return sr.get(200, userService.deleteAccount());
+            log .info("User request: delete servicio");
+            return sr.get(200, servicioService.delete(service));
         } catch (NoSuchElementException exception) {
             return sr.get(404);
+        } catch (DataIntegrityViolationException exception) {
+            return sr.get(403);
         } catch (Exception exception) {
             return sr.get(500);
         }

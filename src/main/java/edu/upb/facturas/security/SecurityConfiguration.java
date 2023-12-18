@@ -3,7 +3,7 @@ package edu.upb.facturas.security;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 import edu.upb.facturas.entity.model.Role;
-import edu.upb.facturas.entity.service.UserService;
+import edu.upb.facturas.service.UserService;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

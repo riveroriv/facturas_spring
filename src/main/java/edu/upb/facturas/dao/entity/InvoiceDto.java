@@ -10,10 +10,9 @@ import java.time.LocalDate;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class FacturaDto {
+public class InvoiceDto {
     private Long id;
     private String servicio;
-    private Double monto;
-    private LocalDate emision;
-    private Integer empresa;
+    private String monto;
+    private String emision;
 }

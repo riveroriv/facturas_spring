@@ -39,7 +39,6 @@ public class SecurityConfiguration {
     @Value("${api.admin.path}")
     private String adminPath;
 
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)

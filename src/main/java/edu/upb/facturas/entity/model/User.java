@@ -1,4 +1,4 @@
-package edu.upb.facturas.entity.model;
+    package edu.upb.facturas.entity.model;
 
 import edu.upb.facturas.dao.entity.UserDto;
 import jakarta.persistence.*;

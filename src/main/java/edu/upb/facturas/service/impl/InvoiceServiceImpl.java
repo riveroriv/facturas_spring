@@ -1,6 +1,8 @@
 package edu.upb.facturas.service.impl;
 
+import edu.upb.facturas.dao.entity.CREAdapterDto;
 import edu.upb.facturas.dao.entity.InvoiceDto;
+import edu.upb.facturas.dao.entity.TigoAdapterDto;
 import edu.upb.facturas.entity.model.Servicio;
 import edu.upb.facturas.entity.model.User;
 import edu.upb.facturas.entity.repository.ServicioRepository;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -33,20 +36,46 @@ public class InvoiceServiceImpl implements InvoiceService {
                 .orElseThrow(() -> new IllegalArgumentException("Not found"));
 
         String url = "";
+        String serv = "";
         if(servicio.getService().equalsIgnoreCase("001")){
-            url="https://d1496fc1-c1b3-4dc5-a477-3fe072ff9215.mock.pstmn.io/tigo/v1/55800/invoice";
+            url="https://0a4fa728-7397-4a64-a444-76af5bce6169.mock.pstmn.io/tigo/v1/55800/invoice";
+            serv = "tigo";
         } else {
-            url="https://d1496fc1-c1b3-4dc5-a477-3fe072ff9215.mock.pstmn.io/cre/v4/socio/2200/facturas";
+            url="https://0a4fa728-7397-4a64-a444-76af5bce6169.mock.pstmn.io/cre/v4/socio/2200/facturas";
+            serv = "cre";
         }
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<InvoiceDto[]> response = restTemplate.getForEntity(url, InvoiceDto[].class);
+        switch (serv) {
+            case "cre":
+                ResponseEntity<CREAdapterDto[]> response = restTemplate.getForEntity(url, CREAdapterDto[].class);
+                List<InvoiceDto> listInvoiceDTO = Arrays.stream(response.getBody()).map(item -> new InvoiceDto(
+                        item.getId(),
+                        item.getServicio(),
+                        item.getMonto().toString(),
+                        item.getEmision()
+                )).collect(Collectors.toList());
+                return listInvoiceDTO;
 
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return Arrays.asList(response.getBody());
-        } else {
-            return null;
+            case "tigo":
+                ResponseEntity<TigoAdapterDto[]> response2 = restTemplate.getForEntity(url, TigoAdapterDto[].class);
+                List<InvoiceDto> listInvoiceDTO2 = Arrays.stream(response2.getBody()).map(item -> new InvoiceDto(
+                        item.getId(),
+                        item.getServicio(),
+                        item.getMonto(),
+                        item.getFechaEmision()
+                )).collect(Collectors.toList());
+                return listInvoiceDTO2;
+            default:
+                return null;
         }
+        //ResponseEntity<InvoiceDto[]> response = restTemplate.getForEntity(url, InvoiceDto[].class);
+
+        //if (response.getStatusCode().is2xxSuccessful()) {
+            //return Arrays.asList(response.getBody());
+        //} else {
+            //return null;
+        //}
     }
 
 
@@ -56,16 +85,43 @@ public class InvoiceServiceImpl implements InvoiceService {
         List<List<InvoiceDto>> invoices = new ArrayList<>();
         for(Servicio s: servicios) {
             String url = "";
+            String serv = "";
             if(s.getService().equalsIgnoreCase("001")){
-                url="https://d1496fc1-c1b3-4dc5-a477-3fe072ff9215.mock.pstmn.io/tigo/v1/55800/invoice";
+                url="https://0a4fa728-7397-4a64-a444-76af5bce6169.mock.pstmn.io/tigo/v1/55800/invoice";
+                serv = "tigo";
             } else {
-                url="https://d1496fc1-c1b3-4dc5-a477-3fe072ff9215.mock.pstmn.io/cre/v4/socio/2200/facturas";
+                url="https://0a4fa728-7397-4a64-a444-76af5bce6169.mock.pstmn.io/cre/v4/socio/2200/facturas";
+                serv = "cre";
             }
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<InvoiceDto[]> response = restTemplate.getForEntity(url, InvoiceDto[].class);
-            if (response.getStatusCode().is2xxSuccessful()) {
-                invoices.add(Arrays.asList(response.getBody()));
+            switch (serv) {
+                case "cre":
+                    ResponseEntity<CREAdapterDto[]> response = restTemplate.getForEntity(url, CREAdapterDto[].class);
+                    List<InvoiceDto> listInvoiceDTO = Arrays.stream(response.getBody()).map(item -> new InvoiceDto(
+                            item.getId(),
+                            item.getServicio(),
+                            item.getMonto().toString(),
+                            item.getEmision()
+                    )).collect(Collectors.toList());
+                    invoices.add(listInvoiceDTO);
+                    break;
+                case "tigo":
+                    ResponseEntity<TigoAdapterDto[]> response2 = restTemplate.getForEntity(url, TigoAdapterDto[].class);
+                    List<InvoiceDto> listInvoiceDTO2 = Arrays.stream(response2.getBody()).map(item -> new InvoiceDto(
+                            item.getId(),
+                            item.getServicio(),
+                            item.getMonto(),
+                            item.getFechaEmision()
+                    )).collect(Collectors.toList());
+                    invoices.add(listInvoiceDTO2);
+                    break;
+                default:
+                    break;
             }
+            //ResponseEntity<InvoiceDto[]> response = restTemplate.getForEntity(url, InvoiceDto[].class);
+            //if (response.getStatusCode().is2xxSuccessful()) {
+                //invoices.add(Arrays.asList(response.getBody()));
+            //}
         }
         return invoices;
     }

@@ -64,4 +64,18 @@ public class InvoiceController {
         }
     }
 
+    @GetMapping("/invoice/sum")
+    public ResponseEntity<?> getSuma( ){
+        try {
+            log .info("User request: get all invoices");
+            return sr.get(200, invoiceService.getSum());
+        } catch (NoSuchElementException exception) {
+            return sr.get(404);
+        } catch (IllegalCallerException exception) {
+            return sr.get(400);
+        } catch (Exception exception) {
+            return sr.get(500);
+        }
+    }
+
 }

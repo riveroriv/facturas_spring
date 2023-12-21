@@ -3,6 +3,7 @@ package edu.upb.facturas.service.impl;
 import edu.upb.facturas.dao.entity.CREAdapterDto;
 import edu.upb.facturas.dao.entity.InvoiceDto;
 import edu.upb.facturas.dao.entity.TigoAdapterDto;
+import edu.upb.facturas.dao.response.SumInvoices;
 import edu.upb.facturas.entity.model.Servicio;
 import edu.upb.facturas.entity.model.User;
 import edu.upb.facturas.entity.repository.ServicioRepository;
@@ -16,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -110,7 +112,7 @@ public class InvoiceServiceImpl implements InvoiceService {
                     List<InvoiceDto> listInvoiceDTO2 = Arrays.stream(response2.getBody()).map(item -> new InvoiceDto(
                             item.getId(),
                             item.getServicio(),
-                            item.getMonto(),
+                            item.getMonto().split(" ")[0],
                             item.getFechaEmision()
                     )).collect(Collectors.toList());
                     invoices.add(listInvoiceDTO2);
@@ -124,6 +126,25 @@ public class InvoiceServiceImpl implements InvoiceService {
             //}
         }
         return invoices;
+    }
+
+    @Override
+    public SumInvoices getSum() {
+        List<List<InvoiceDto>> facturasPorServicio = this.getAll();
+        double suma = 0;
+        int nro = 0;
+        for(List<InvoiceDto> facturas: facturasPorServicio) {
+            for(InvoiceDto factura: facturas) {
+                suma+= Double.valueOf(factura.getMonto());
+                nro++;
+            }
+        }
+        DecimalFormat f = new DecimalFormat("##.00");
+        suma = Double.valueOf(f.format(suma));
+        SumInvoices si = new SumInvoices();
+        si.setSuma(suma);
+        si.setNro_facturas(nro);
+        return si;
     }
 
     private User getCurrentUser() {
